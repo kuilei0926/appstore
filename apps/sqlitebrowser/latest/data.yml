@@ -5,6 +5,15 @@ additionalProperties:
       envKey: PANEL_APP_PORT_HTTP
       labelEn: HTTP Port
       labelZh: HTTP 端口
+      label:
+        en: 'HTTP Port'
+        zh: 'HTTP 端口'
+        zh-Hant: 'HTTP 埠'
+        ja: 'HTTP ポート'
+        ko: 'HTTP 포트'
+        ru: 'HTTP-порт'
+        ms: 'Port HTTP'
+        pt-br: 'Porta HTTP'
       required: true
       rule: paramPort
       type: number
@@ -13,6 +22,15 @@ additionalProperties:
       envKey: PANEL_APP_PORT_HTTPS
       labelEn: HTTPS Port
       labelZh: HTTPS 端口
+      label:
+        en: 'HTTPS Port'
+        zh: 'HTTPS 端口'
+        zh-Hant: 'HTTPS 埠'
+        ja: 'HTTPS ポート'
+        ko: 'HTTPS 포트'
+        ru: 'HTTPS порт'
+        ms: 'Port HTTPS'
+        pt-br: 'Porta HTTPS'
       required: true
       rule: paramPort
       type: number
@@ -21,6 +39,15 @@ additionalProperties:
       envKey: DATA_PATH
       labelEn: Data folder path
       labelZh: 数据文件夹路径
+      label:
+        en: 'Data folder path'
+        zh: '数据文件夹路径'
+        zh-Hant: '資料夾路徑'
+        ja: 'データフォルダパス'
+        ko: '데이터 폴더 경로'
+        ru: 'Путь к папке данных'
+        ms: 'Laluan folder data'
+        pt-br: 'Caminho da pasta de dados'
       required: true
       type: text
     - default: Asia/Shanghai
@@ -28,6 +55,15 @@ additionalProperties:
       envKey: TIME_ZONE
       labelEn: Time zone
       labelZh: 时区
+      label:
+        en: 'Time zone'
+        zh: '时区'
+        zh-Hant: '時區'
+        ja: 'タイムゾーン'
+        ko: '시간대'
+        ru: 'Часовой пояс'
+        ms: 'Zon masa'
+        pt-br: 'Fuso horário'
       required: true
       type: text
     - default: user
@@ -35,6 +71,15 @@ additionalProperties:
       envKey: HTTP_USER
       labelEn: http auth user
       labelZh: HTTP 用户
+      label:
+        en: 'http auth user'
+        zh: 'HTTP 用户'
+        zh-Hant: 'HTTP 認證使用者'
+        ja: 'HTTP 認証ユーザー'
+        ko: 'HTTP 인증 사용자'
+        ru: 'Пользователь HTTP-аутентификации'
+        ms: 'Pengguna pengesahan HTTP'
+        pt-br: 'Usuário de autenticação HTTP'
       required: true
       type: text
     - default: sqlitebrowser
@@ -42,7 +87,89 @@ additionalProperties:
       envKey: HTTP_PWD
       labelEn: http auth password
       labelZh: HTTP 密码
+      label:
+        en: 'http auth password'
+        zh: 'HTTP 密码'
+        zh-Hant: 'HTTP 認證密碼'
+        ja: 'HTTP 認証パスワード'
+        ko: 'HTTP 인증 비밀번호'
+        ru: 'Пароль HTTP-аутентификации'
+        ms: 'Kata laluan pengesahan HTTP'
+        pt-br: 'Senha de autenticação HTTP'
       random: true
       required: true
       rule: paramComplexity
       type: password
+
+    - default: DB Browser for SQLite
+      edit: true
+      envKey: TITLE
+      labelEn: Browser page title
+      labelZh: 浏览器页面标题
+      label:
+        en: Browser page title
+        zh: 浏览器页面标题
+        zh-Hant: 瀏覽器頁面標題
+        ja: ブラウザーのページタイトル
+        ko: 브라우저 페이지 제목
+        ru: Заголовок страницы браузера
+        ms: Tajuk halaman pelayar
+        pt-br: Titulo da pagina do navegador
+      required: false
+      type: text
+    - default: Selkies
+      edit: true
+      envKey: SELKIES_UI_TITLE
+      labelEn: Sidebar title
+      labelZh: 侧边栏标题
+      label:
+        en: Sidebar title
+        zh: 侧边栏标题
+        zh-Hant: 側邊欄標題
+        ja: サイドバータイトル
+        ko: 사이드바 제목
+        ru: Заголовок боковой панели
+        ms: Tajuk bar sisi
+        pt-br: Titulo da barra lateral
+      required: false
+      type: text
+    - default: selkies-dashboard
+      edit: true
+      envKey: DASHBOARD
+      labelEn: Dashboard UI
+      labelZh: 仪表盘界面
+      label:
+        en: Dashboard UI
+        zh: 仪表盘界面
+        zh-Hant: 儀表板介面
+        ja: ダッシュボード UI
+        ko: 대시보드 UI
+        ru: Интерфейс панели
+        ms: UI papan pemuka
+        pt-br: Interface do painel
+      required: false
+      type: select
+      values:
+        - label: selkies-dashboard
+          value: selkies-dashboard
+        - label: selkies-dashboard-zinc
+          value: selkies-dashboard-zinc
+        - label: selkies-dashboard-wish
+          value: selkies-dashboard-wish
+
+    - default: zh_CN.UTF-8
+      edit: true
+      envKey: LC_ALL
+      labelEn: Desktop language locale
+      labelZh: 桌面语言区域
+      label:
+        en: Desktop language locale
+        zh: 桌面语言区域
+        zh-Hant: 桌面語言區域
+        ja: デスクトップ言語ロケール
+        ko: 데스크톱 언어 로케일
+        ru: Локаль языка рабочего стола
+        ms: Lokal bahasa desktop
+        pt-br: Localidade do idioma da area de trabalho
+      required: false
+      type: text

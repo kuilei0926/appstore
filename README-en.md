@@ -1,46 +1,59 @@
-[中文](https://github.com/okxlin/appstore/blob/localApps/README.md) | English
-***
+<h1 align="center">1Panel Third-Party App Store</h1>
 
-## Contribution Link
+<p align="center">
+  Docker app configurations adapted for the <code>1Panel</code> app store <code>2.0</code>. After import, apps can be installed from the 1Panel local app store or run directly with <code>docker-compose</code> from each app version directory.
+</p>
 
-[**Click here to contribute with AFDIAN**](https://afdian.com/a/dockerapps)
+<p align="center">
+  <img src="docs/afdian-logo.png" alt="Docker Apps project banner" width="640">
+</p>
 
-[![**Click here to contribute with AFDIAN**](https://github.com/okxlin/appstore/raw/localApps/docs/afdian-logo.png)](https://afdian.com/a/dockerapps)
+<p align="center">
+  <a href="README.md"><img src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-D9D9D9?style=flat-square" alt="阅读简体中文版"></a>
+  <a href="README-en.md"><img src="https://img.shields.io/badge/English-2875B6?style=flat-square" alt="English (current language)"></a>
+</p>
 
-* * *
+## Support
 
-## Table of Contents
+<p align="center">
+  <a href="https://afdian.com/a/dockerapps"><strong>Support this project on AFDIAN</strong></a><br><br>
+  <strong>WeChat Reward Code</strong><br>
+  <img src="docs/wechat-reward.webp" alt="WeChat reward code" width="200">
+</p>
 
-- [Contribution Link](#contribution-link)
-- [Table of Contents](#table-of-contents)
+<details>
+<summary><strong>Table of Contents</strong></summary>
+
 - [Disclaimer](#disclaimer)
   - [1. Image Container Adaptation](#1-image-container-adaptation)
   - [2. Compliance with Laws](#2-compliance-with-laws)
   - [3. Acceptance of Disclaimer](#3-acceptance-of-disclaimer)
 - [1. Introduction](#1-introduction)
-  - [1Panel Third-Party App Store Categories and Introduction](#1panel-third-party-app-store-categories-and-introduction)
-- [2. Usage](#2-usage)
-  - [2.1 Domestic Network](#21-domestic-network)
-    - [2.1.1 Getting Apps via Git Command](#211-getting-apps-via-git-command)
-    - [2.1.2 Getting Apps via Compressed Package](#212-getting-apps-via-compressed-package)
-  - [2.2 International Network](#22-international-network)
-    - [2.2.1 Getting Apps via Git Command](#221-getting-apps-via-git-command)
-    - [2.2.2 Getting Apps via Compressed Package](#222-getting-apps-via-compressed-package)
-- [3. Remarks](#3-remarks)
-- [4. App Overview](#4-app-overview)
+- [2. Contributing Apps](#2-contributing-apps)
+- [Retired Apps](#retired-apps)
+- [3. Usage](#3-usage)
+  - [3.1 GitHub Network Notes](#31-github-network-notes)
+  - [3.2 Getting Apps via Git Command](#32-getting-apps-via-git-command)
+  - [3.3 Getting Apps via Compressed Package](#33-getting-apps-via-compressed-package)
+- [4. Remarks](#4-remarks)
+- [5. App Overview](#5-app-overview)
 
+</details>
 
 ***
 
 ## Disclaimer
 
 ### 1. Image Container Adaptation
+
 This project specifically adapts to the `1Panel` app store for original `docker` image container operations. We do not make any explicit or implicit warranties or statements regarding the validity of any original images, and we are not responsible for any effects caused by using applications from this repository. Users undertake the risks associated with using this project on their own.
 
 ### 2. Compliance with Laws
+
 When using this repository, users must comply with the laws and regulations of their respective countries and regions. Certain applications may be restricted by specific national laws, and users need to understand and comply with relevant legal requirements. This repository is not responsible for any consequences arising from the user's violation of laws and regulations.
 
 ### 3. Acceptance of Disclaimer
+
 By importing and using the applications in this repository, the user signifies that they have read, understood, and accepted all the terms and conditions of this disclaimer.
 
 Please note that this disclaimer applies only to the use of this repository and does not encompass other third-party applications or services. We are not responsible for the accuracy, completeness, reliability, or legality of third-party content linked to this repository.
@@ -48,106 +61,131 @@ Please note that this disclaimer applies only to the use of this repository and 
 Before using this repository, please ensure that you have read, understood, and accepted all the terms and conditions of this disclaimer.
 
 ***
+
 ## 1. Introduction
-These are some configurations of docker applications adapted for the `1Panel` store version 2.0.
 
-Dedicated to running various Docker applications with just one click. Enjoy convenience and efficiency without complex configurations.
+This repository organizes app directories, metadata, form variables, and Docker Compose files according to the 1Panel v2 app specification. The goal is to make apps installable after import with less manual deployment and repeated configuration.
 
-### 1Panel Third-Party App Store Categories and Introduction
+## 2. Contributing Apps
 
-- https://1p.131.gs
+> [!IMPORTANT]
+> Before submitting an app PR, third-party developers are encouraged to generate or validate the app package with [okxlin/1panel-app-adapter](https://github.com/okxlin/1panel-app-adapter). It checks the 1Panel v2 directory layout, `data.yml`, `docker-compose.yml`, environment variable closure, i18n labels, and common release issues.
 
-**Special thanks to the author [@baozishu](https://github.com/baozishu)**
+When opening a PR, include reproducible upstream sources, image sources, default ports, data directories, required dependencies, and test results. Commit only the final app directory to this repository; temporary test output and process files are not needed.
 
-## 2. Usage
+## Retired Apps
 
-The default installation path of `1Panel` is `/opt/`, which can be modified as needed.
+Apps that can no longer be installed and have no trustworthy replacement image are removed from the active catalog. Retirement reasons and last available versions are recorded in [`.github/retired-apps.yml`](.github/retired-apps.yml), while the complete app files remain recoverable from Git history.
 
-### 2.1 Domestic Network
+## 3. Usage
 
-> GitHub Acceleration Methods
->> - (Added to this repository) Self-built: https://github.com/hunshcn/gh-proxy
->> - https://ghp.ci
+The commands below use `/opt` as the default 1Panel installation base directory. Before running each command block, set `PANEL_BASE_DIR` to match your installation.
 
-#### 2.1.1 Getting Apps via Git Command
+### 3.1 GitHub Network Notes
 
-In the `Shell Script` task type in the `1Panel` scheduled tasks, add and execute the following command, or run the following command in the terminal:
+GitHub proxy mirrors change often, so this README no longer maintains a fixed acceleration domain list. If your network cannot reach GitHub, use a trusted proxy, a self-hosted `gh-proxy`, or another acceleration method, and verify that the proxy does not modify repository content.
 
-```shell
-git clone -b localApps https://ghp.ci/https://github.com/okxlin/appstore /opt/1panel/resource/apps/local/appstore-localApps
+The examples below use official GitHub URLs. Replace them according to your proxy rules if needed.
 
-cp -rf /opt/1panel/resource/apps/local/appstore-localApps/apps/* /opt/1panel/resource/apps/local/
+### 3.2 Getting Apps via Git Command
 
-rm -rf /opt/1panel/resource/apps/local/appstore-localApps
+Create a `Shell Script` scheduled task in 1Panel and run the following commands, or execute them directly in a terminal:
+
+```bash
+set -euo pipefail
+
+PANEL_BASE_DIR="/opt" # Change this to your 1Panel installation base directory
+
+case "$PANEL_BASE_DIR" in
+  /*) ;;
+  *)
+    echo "PANEL_BASE_DIR must be an absolute path" >&2
+    exit 1
+    ;;
+esac
+
+PANEL_BASE_DIR="$(realpath -m -- "$PANEL_BASE_DIR")"
+if [ "$PANEL_BASE_DIR" = "/" ]; then
+  echo "PANEL_BASE_DIR cannot be /" >&2
+  exit 1
+fi
+
+LOCAL_APPS_DIR="$PANEL_BASE_DIR/1panel/resource/apps/local"
+IMPORT_DIR="$LOCAL_APPS_DIR/appstore-localApps"
+
+if [ ! -d "$LOCAL_APPS_DIR" ]; then
+  echo "Local app directory does not exist: $LOCAL_APPS_DIR" >&2
+  exit 1
+fi
+
+git clone -b localApps https://github.com/okxlin/appstore "$IMPORT_DIR"
+
+cp -a "$IMPORT_DIR/apps/." "$LOCAL_APPS_DIR/"
+
+find "$IMPORT_DIR" -xdev -mindepth 1 -delete
+rmdir "$IMPORT_DIR"
 ```
 
-Then refresh the local applications in the app store.
+When the commands finish, refresh the local apps in the app store.
 
-#### 2.1.2 Getting Apps via Compressed Package
+### 3.3 Getting Apps via Compressed Package
 
-In the `Shell Script` task type in the `1Panel` scheduled tasks, add and execute the following command, or run the following command in the terminal:
+Create a `Shell Script` scheduled task in 1Panel and run the following commands, or execute them directly in a terminal:
 
-```shell
-wget -P /opt/1panel/resource/apps/local https://ghp.ci/https://github.com/okxlin/appstore/archive/refs/heads/localApps.zip
+```bash
+set -euo pipefail
 
-unzip -o -d /opt/1panel/resource/apps/local/ /opt/1panel/resource/apps/local/localApps.zip
+PANEL_BASE_DIR="/opt" # Change this to your 1Panel installation base directory
 
-cp -rf /opt/1panel/resource/apps/local/appstore-localApps/apps/* /opt/1panel/resource/apps/local/
+case "$PANEL_BASE_DIR" in
+  /*) ;;
+  *)
+    echo "PANEL_BASE_DIR must be an absolute path" >&2
+    exit 1
+    ;;
+esac
 
-rm -rf /opt/1panel/resource/apps/local/appstore-localApps
+PANEL_BASE_DIR="$(realpath -m -- "$PANEL_BASE_DIR")"
+if [ "$PANEL_BASE_DIR" = "/" ]; then
+  echo "PANEL_BASE_DIR cannot be /" >&2
+  exit 1
+fi
 
-rm -rf /opt/1panel/resource/apps/local/localApps.zip
+LOCAL_APPS_DIR="$PANEL_BASE_DIR/1panel/resource/apps/local"
+IMPORT_DIR="$LOCAL_APPS_DIR/appstore-localApps"
+ARCHIVE_PATH="$LOCAL_APPS_DIR/localApps.zip"
+
+if [ ! -d "$LOCAL_APPS_DIR" ]; then
+  echo "Local app directory does not exist: $LOCAL_APPS_DIR" >&2
+  exit 1
+fi
+
+wget -O "$ARCHIVE_PATH" https://github.com/okxlin/appstore/archive/refs/heads/localApps.zip
+
+unzip -o "$ARCHIVE_PATH" -d "$LOCAL_APPS_DIR"
+
+cp -a "$IMPORT_DIR/apps/." "$LOCAL_APPS_DIR/"
+
+find "$IMPORT_DIR" -xdev -mindepth 1 -delete
+rmdir "$IMPORT_DIR"
+
+unlink "$ARCHIVE_PATH"
 ```
 
-Then refresh the local applications in the app store.
+When the commands finish, refresh the local apps in the app store.
 
-### 2.2 International Network
+## 4. Remarks
 
-#### 2.2.1 Getting Apps via Git Command
+> [!NOTE]
+> Apps that do not appear in the local app list have not been fully adapted for panel operations, but they can usually still be run from a terminal.
 
-In the `Shell Script` task type in the `1Panel` scheduled tasks, add and execute the following command, or run the following command in the terminal:
+For example, to run `rustdesk`:
 
-```shell
-git clone -b localApps https://github.com/okxlin/appstore /opt/1panel/resource/apps/local/appstore-localApps
+```bash
+PANEL_BASE_DIR="/opt" # Change this to your 1Panel installation base directory
 
-cp -rf /opt/1panel/resource/apps/local/appstore-localApps/apps/* /opt/1panel/resource/apps/local/
-
-rm -rf /opt/1panel/resource/apps/local/appstore-localApps
-```
-
-Then refresh the local applications in the app store.
-
-#### 2.2.2 Getting Apps via Compressed Package
-
-In the `Shell Script` task type in the `1Panel` scheduled tasks, add and execute the following command, or run the following command in the terminal:
-
-```shell
-wget -P /opt/1panel/resource/apps/local https://github.com/okxlin/appstore/archive/refs/heads/localApps.zip
-
-unzip -o -d /opt/1panel/resource/apps/local/ /opt/1panel/resource/apps/local/localApps.zip
-
-cp -rf /opt/1panel/resource/apps/local/appstore-localApps/apps/* /opt/1panel/resource/apps/local/
-
-rm -rf /opt/1panel/resource/apps/local/appstore-localApps
-
-rm -rf /opt/1panel/resource/apps/local/localApps.zip
-```
-
-Then refresh the local applications in the app store.
-
-## 3. Remarks
-
-**If an application is not displayed in the local app list, it means it has not been fully adapted for operation in the app store panel.**
-
-**However, it can still be run directly in the terminal.**
-
-> Most applications in this repository support running directly with `docker-compose up`
-
-Taking `rustdesk` as an example:
-
-```shell
 # Enter the latest version directory of rustdesk
-cd /opt/1panel/resource/apps/local/rustdesk/versions/latest/
+cd "$PANEL_BASE_DIR/1panel/resource/apps/local/rustdesk/versions/latest/" || exit 1
 
 # Copy .env.sample as .env
 cp .env.sample .env
@@ -160,9 +198,8 @@ docker-compose up -d
 
 # View the necessary key for connecting
 cat ./data/hbbs/id_ed25519.pub
-
 ```
 
-## 4. App Overview
+## 5. App Overview
 
 ![](https://github.com/okxlin/appstore/raw/localApps/docs/app-list.png)

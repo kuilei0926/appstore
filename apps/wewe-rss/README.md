@@ -1,17 +1,72 @@
 # WeWe RSS
 
+## 产品介绍
+
+WeWe RSS 是用于生成微信公众号 RSS 订阅源的自托管服务。本仓库上游已归档，商店包继续保留用于现有部署，但不会加入自动更新白名单。
+
+## 主要功能
+
+- 登录并管理微信公众号订阅账号。
+- 生成和定时更新 RSS 订阅源。
+- MySQL 版本可通过 1Panel 数据库选择器复用现有 MySQL 应用。
+
+## 访问说明
+
+- 安装后通过表单配置的 HTTP 端口访问 Web 界面。
+- MySQL 版本要求目标数据库应用已安装、运行，并与本应用加入 `1panel-network`。
+- 上游项目已归档，部署前请评估维护与安全风险，并避免将服务直接暴露到不受信任的公网。
+
+## Introduction
+
+WeWe RSS is a self-hosted service that generates RSS feeds for WeChat official accounts. The upstream repository is archived, so this package is retained for existing deployments and is not eligible for automatic updates.
+
+## Features
+
+- Manage WeChat subscription accounts.
+- Generate and periodically refresh RSS feeds.
+- Reuse an existing MySQL app through the 1Panel database selector.
+
+## 应用简介
 更优雅的微信公众号订阅方式。
 
-## 使用方式
+英文说明：A more elegant way to subscribe to WeChat.
 
-1. 进入账号管理，点击添加账号，微信扫码登录微信读书账号。
-   <img width="400" src="https://github.com/cooderl/wewe-rss/raw/main/assets/preview2.png"/>
+## 部署说明
+- 本应用使用 Docker Compose 在 1Panel 中部署。
+- 应用分类：网站。
+- 支持架构：amd64。
+- 可选版本：`latest`、`latest-mysql`；固定版本以应用商店当前版本目录和安装表单为准。
+- 安装后按应用表单中的端口访问 Web UI、SSH 或对应服务。
 
-2. 进入公众号源，点击添加，通过提交微信公众号分享链接，订阅微信公众号。
-   **（添加频率过高容易被封控，等24小时解封）**
-   <img width="400" src="https://github.com/cooderl/wewe-rss/raw/main/assets/preview3.png"/>
+## 端口
+| 变量 | 说明 | 默认值 | 必填 |
+| --- | --- | --- | --- |
+| PANEL_APP_PORT_HTTP | 端口 | 40332 | 是 |
 
-## 账号状态说明
+## 数据持久化
+| 变量 | 说明 | 默认值 | 必填 |
+| --- | --- | --- | --- |
+| DATA_PATH | 数据路径 | ./data | 是 |
+| DATABASE_TYPE | 数据库类型 | sqlite | 是 |
+
+升级或迁移前，请在 1Panel 中备份上述数据目录。
+
+## 配置项
+| 变量 | 说明 | 默认值 | 必填 |
+| --- | --- | --- | --- |
+| PANEL_DB_TYPE | 数据库服务 | mysql | 是 |
+| PANEL_DB_PORT | 数据库端口 | 3306 | 是 |
+| PANEL_DB_NAME | 数据库名 | wewe-rss | 是 |
+| PANEL_DB_USER | 数据库用户 | wewe-rss | 是 |
+| PANEL_DB_USER_PASSWORD | 数据库用户密码 | 随机生成 | 是 |
+| AUTH_CODE | 授权码 | password | 是 |
+| SERVER_ORIGIN_URL | 外部访问地址 | http://1.2.3.4:40332 | 是 |
+| FEED_MODE | 提取模式 | fulltext | 否 |
+| CRON_EXPRESSION | 定时更新表达式 | 35 5,17 * * * | 否 |
+| MAX_REQUEST_PER_MINUTE | 每分钟最大请求次数 | 60 | 否 |
+
+## 使用说明
+### 账号状态说明
 
 - 今日小黑屋
 
@@ -25,6 +80,5 @@
 - 失效
   > 账号登录状态失效，需要重新登录
 
-## 风险声明
-
-为了确保本项目的持久运行，某些接口请求将通过`weread.111965.xyz`进行转发。请放心，该转发服务不会保存任何数据。
+## 参考资料
+- 官网: <https://github.com/cooderl/wewe-rss>

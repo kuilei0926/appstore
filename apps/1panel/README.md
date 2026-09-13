@@ -1,117 +1,75 @@
-# 使用说明
+# 1Panel
 
-### 镜像 Github：https://github.com/okxlin/docker-1panel
+## 产品介绍
 
-### 镜像 Docker Hub：https://hub.docker.com/r/moelin/1panel
+1Panel 是现代化、开源的 Linux 服务器运维管理面板。本应用使用 `moelin/1panel` 容器镜像，提供中国版和国际版的 V1 LTS、V2 固定版及浮动版本。
 
-如果更新了更高版本的镜像，实际是更新了对应版本的二进制程序，面板显示的相关版本还需要手动更新，具体操作可以查看[**Github**](https://github.com/okxlin/docker-1panel)。
+## 主要功能
 
-**不要点击容器化部署的 `1Panel` 右下角进行更新，应该拉取新镜像再更新**
-***
-- 默认端口：`10086`
-- 默认账户：`1panel`
-- 默认密码：`1panel_password`
-- 默认入口：`entrance`
-***
-- 不可调整参数
-  - `/var/run/docker.sock`的相关映射
- ***
-- 可调整参数
-> **推荐使用/opt路径，否则有些调用本地文件的应用可能出现异常**
-  - `/opt:/opt`                        文件存储映射
-  - `/root:/root`                        文件存储映射
-  - `TZ=Asia/Shanghai`                        时区设置
-  - `1panel`                          容器名
-  - `/var/lib/docker/volumes:/var/lib/docker/volumes` 存储卷映射
-***
-**架构平台对应镜像**
-- amd64
-- arm64
-- armv7
-- ppc64le
-- s390x
-> 2023年9月3日已经更新单标签多镜像
-```
-docker pull moelin/1panel:latest
-```
+- Linux 服务器、容器、网站、数据库和应用管理
+- 可配置管理员账号、密码、访问端口和安全入口
+- CN/Global 与 V1/V2 版本线独立维护
 
-# 原始相关
-***
+## 安装说明
 
-<p align="center"><a href="https://1panel.cn"><img src="http://1panel.oss-cn-hangzhou.aliyuncs.com/img/1panel-logo.png" alt="1Panel" width="300" /></a></p>
-<p align="center"><b>现代化、开源的 Linux 服务器运维管理面板</b></p>
-<p align="center">
-  <a href="https://www.gnu.org/licenses/gpl-3.0.html"><img src="https://shields.io/github/license/1Panel-dev/1Panel?color=%231890FF" alt="License: GPL v3"></a>
-  <a href="https://app.codacy.com/gh/1Panel-dev/1Panel?utm_source=github.com&utm_medium=referral&utm_content=1Panel-dev/1Panel&utm_campaign=Badge_Grade_Dashboard"><img src="https://app.codacy.com/project/badge/Grade/da67574fd82b473992781d1386b937ef" alt="Codacy"></a>
-  <a href="https://github.com/1Panel-dev/1Panel/releases"><img src="https://img.shields.io/github/v/release/1Panel-dev/1Panel" alt="GitHub release"></a>
-  <a href="https://github.com/1Panel-dev/1Panel"><img src="https://img.shields.io/github/stars/1Panel-dev/1Panel?color=%231890FF&style=flat-square" alt="Stars"></a>
-  <a href="https://app.fossa.com/projects/git%2Bgithub.com%2F1Panel-dev%2F1Panel?ref=badge_shield"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2F1Panel-dev%2F1Panel.svg?type=shield" alt="FOSSA Status"></a><br>
-  [<a href="https://github.com/1Panel-dev/1Panel/blob/dev/docs/README_TW.md">中文(繁體)</a>] | [<a href="https://github.com/1Panel-dev/1Panel/blob/dev/docs/README_EN.md">English</a>] | [<a href="https://github.com/1Panel-dev/1Panel/blob/dev/docs/README_JP.md">日本語</a>]
-</p>
+可选版本：
 
-------------------------------
+- `v1`：中国版 V1 LTS 浮动标签
+- `v2`：中国版 V2 浮动标签
+- `global-v1`：国际版 V1 LTS 浮动标签
+- `global-v2`：国际版 V2 浮动标签
+- 固定版本标签以当前应用商店版本目录和安装表单为准。
 
-1Panel 是新一代的 Linux 服务器运维管理面板。
+生产环境建议选择固定版本；浮动标签适合希望自动跟随同一版本线镜像更新的部署。
 
-- **高效管理**：用户可以通过 Web 图形界面轻松管理 Linux 服务器，实现主机监控、文件管理、数据库管理、容器管理等功能；
-- **快速建站**：深度集成开源建站软件 WordPress 和 [Halo](https://github.com/halo-dev/halo/)，域名绑定、SSL 证书配置等操作一键搞定；
-- **应用商店**：精选上架各类高质量的开源工具和应用软件，协助用户轻松安装并升级；
-- **安全可靠**：基于容器管理并部署应用，实现最小的漏洞暴露面，同时提供防火墙和日志审计等功能；
-- **一键备份**：支持一键备份和恢复，用户可以将数据备份到各类云端存储介质，永不丢失。
+- V1 和 V2 不能直接跨版本升级或降级。升级脚本会检测数据库类型并拒绝不兼容操作。
+- `crossVersionUpdate: false` 会阻断不同主版本目录之间的跨版本升级，同时允许同一版本线内的固定目录升级。
+- V1 到 V2 迁移前必须备份数据，并遵循官方迁移文档。
+- 数据目录默认为宿主机 `/opt/1panel-data`，也可以在安装表单中改为其他绝对路径。
+- 容器会将数据目录按相同的绝对路径挂载，并把该路径作为镜像的 `BASE_DIR`。这是 1Panel 通过宿主机 Docker Socket 创建业务容器时正确解析 bind mount 源路径所必需的。
+- 从旧商店版本升级时，原有相对路径 `./data` 会被解析为原应用目录下的绝对路径，不会移动已有数据。
+- 管理员密码为必填项；安全入口不要包含前导或末尾 `/`。
 
-1Panel 三分钟速览：https://www.bilibili.com/video/BV1Mt421n7LZ/
+## 访问说明
 
-## UI 展示
+安装完成后访问 `http://服务器地址:安装端口/安全入口/`，使用安装表单中设置的管理员账号和密码登录。
 
-![UI展示](https://resource.fit2cloud.com/1panel/img/overview.png)
+容器镜像中的 1Panel 不应通过面板右下角执行自更新。请通过更新应用镜像完成同一版本线内的升级。
 
-## 快速开始
+## 高风险权限
 
-**在线体验**
+> **高风险：本应用挂载 `/var/run/docker.sock` 并使用宿主机网络。**
 
-- 环境地址：<https://demo.1panel.cn/>
-- 用户名：demo
-- 密码：1panel
+这些权限是 1Panel 管理宿主机 Docker、网络和应用的核心要求。Docker Socket 可赋予容器等同宿主机 root 的控制能力，宿主机网络也会使面板端口直接监听在宿主机上。
 
-**一键安装**
+- 请设置高强度管理员密码和不可预测的安全入口。
+- 不要将管理端口直接暴露到不可信网络。
+- 建议使用防火墙、可信来源限制或额外的反向代理访问控制。
+- V1 为兼容旧部署额外挂载 `/root` 和 `/var/lib/docker/volumes`；V2 不使用这两个扩展挂载。
 
-执行如下命令一键安装 1Panel:
+## 数据持久化
 
-```sh
-curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh && sudo bash quick_start.sh
-```
+备份 `DATA_PATH` 对应的宿主机绝对目录即可保存 1Panel 数据。V1 和 V2 的数据库结构不同，不能通过替换镜像标签直接共用或转换数据。
 
-**学习资料**
+## Introduction
 
-- [在线文档](https://1panel.cn/docs/)
-- [教学视频](https://space.bilibili.com/510493147/channel/collectiondetail?sid=1199760)
-- [社区论坛](https://bbs.fit2cloud.com/c/1p/7)
+1Panel is a modern, open-source Linux server operations and management panel. This package provides CN and Global V1 LTS and V2 tracks using the `moelin/1panel` images.
 
-**加入微信交流群**
+## Features
 
-<img src="https://1panel.cn/img/wechat-group.jpg" width="156" height="156"/>
+- Linux server, container, website, database, and application management
+- Configurable administrator credentials, listening port, and security entrance
+- Independently maintained CN/Global and V1/V2 image tracks
 
-## 安全说明
+## Access
 
-如果您在使用过程中发现任何安全问题，请通过以下方式直接联系我们：
+Open `http://server-address:installed-port/security-entrance/` and sign in with the administrator credentials supplied during installation.
 
-- 邮箱：support@fit2cloud.com
-- 电话：400-052-0755
+Do not use the in-panel self-update action. Upgrade by changing the application image within the same major-version track. Direct V1/V2 upgrades and downgrades are blocked; use the official migration procedure instead.
 
-## Star History
+## References
 
-[![Star History Chart](https://api.star-history.com/svg?repos=1Panel-dev/1Panel&type=Date)](https://star-history.com/#1Panel-dev/1Panel&Date)
-
-## FOSSA Status
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F1Panel-dev%2F1Panel.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2F1Panel-dev%2F1Panel?ref=badge_large)
-
-## License
-
-Copyright (c) 2014-2023 [FIT2CLOUD 飞致云](https://fit2cloud.com/), All rights reserved.
-
-Licensed under The GNU General Public License version 3 (GPLv3)  (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-
-<https://www.gnu.org/licenses/gpl-3.0.html>
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+- 1Panel: <https://github.com/1Panel-dev/1Panel>
+- Container image source: <https://github.com/okxlin/docker-1panel>
+- Docker Hub: <https://hub.docker.com/r/moelin/1panel>
+- V1 to V2 migration: <https://1panel.cn/docs/v2/installation/v1_migrate/>

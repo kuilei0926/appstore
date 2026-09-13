@@ -1,26 +1,45 @@
-#!/bin/bash
-# This script copies the version from docker-compose.yml to config.json.
+#!/usr/bin/env bash
+set -euo pipefail
 
-app_name=$1
-old_version=$2
+# This script renames a version directory to match the changed primary service image tag.
 
-# find all docker-compose files under apps/$app_name (there should be only one)
-docker_compose_files=$(find apps/$app_name/$old_version -name docker-compose.yml)
+app_name=${1:?missing app name}
+old_version=${2:?missing source version}
+docker_compose_file=${3:?missing docker-compose path}
+base_ref=${4:?missing base ref}
+source_dir="apps/$app_name/$old_version"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+policy_file="$script_dir/../renovate-primary-services.json"
+selector="$script_dir/../scripts/renovate_app_version.py"
 
-for docker_compose_file in $docker_compose_files
-do
-	# Assuming that the app version will be from the first docker image
-	first_service=$(yq '.services | keys | .[0]' $docker_compose_file)
+case "$old_version" in
+  latest|stable)
+    echo "skip: $source_dir is a rolling alias"
+    exit 0
+    ;;
+esac
 
-	image=$(yq .services.$first_service.image $docker_compose_file)
+if [[ ! -d "$source_dir" ]]; then
+  echo "skip: $source_dir does not exist"
+  exit 0
+fi
 
-	# Only apply changes if the format is <image>:<version>
-	if [[ "$image" == *":"* ]]; then
-	  version=$(cut -d ":" -f2- <<< "$image")
+trimmed_version=$(python3 "$selector" \
+  --app "$app_name" \
+  --old-version "$old_version" \
+  --compose "$docker_compose_file" \
+  --base-ref "$base_ref" \
+  --policy-file "$policy_file")
 
-	  # Trim the "v" prefix
-	  trimmed_version=${version/#"v"}
+if [[ -z "$trimmed_version" || "$trimmed_version" == "$old_version" ]]; then
+  echo "skip: $source_dir already matches the selected primary image tag"
+  exit 0
+fi
 
-      mv apps/$app_name/$old_version apps/$app_name/$trimmed_version
-    fi
-done
+target_dir="apps/$app_name/$trimmed_version"
+if [[ -e "$target_dir" ]]; then
+  echo "target already exists: $target_dir" >&2
+  exit 1
+fi
+
+mv "$source_dir" "$target_dir"

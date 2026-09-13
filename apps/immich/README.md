@@ -1,46 +1,78 @@
-<p align="center"> 
-  <br/>  
-  <a href="https://opensource.org/license/agpl-v3"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec" alt="License: AGPLv3"></a>
-  <a href="https://discord.immich.app">
-    <img src="https://img.shields.io/discord/979116623879368755.svg?label=Discord&logo=Discord&style=for-the-badge&logoColor=000000&labelColor=ececec" atl="Discord"/>
-  </a>
-  <br/>  
-  <br/>   
-</p>
+# Immich
 
-<p align="center">
-<img src="https://github.com/immich-app/immich/raw/main/design/immich-logo-stacked-light.svg" width="300" title="Login With Custom URL">
-</p>
-<h3 align="center">高性能的照片和视频自托管解决方案</h3>
-<p align="center">  
-</p>
-<br/>
-<br/>
-<p align="center">
+## 产品介绍
+Immich 是一个高性能的开源照片和视频管理平台，可将移动设备媒体备份到自托管服务器，并提供时间线、相册、搜索、人脸识别和机器学习功能。
 
-  <a href="https://github.com/immich-app/immich/blob/main/README.md">English</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_ca_ES.md">Català</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_es_ES.md">Español</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_fr_FR.md">Français</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_it_IT.md">Italiano</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_ja_JP.md">日本語</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_ko_KR.md">한국어</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_de_DE.md">Deutsch</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_nl_NL.md">Nederlands</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_tr_TR.md">Türkçe</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_ru_RU.md">Русский</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_pt_BR.md">Português Brasileiro</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_sv_SE.md">Svenska</a>
-  <a href="https://github.com/immich-app/immich/blob/main/readme_i18n/README_ar_JO.md">العربية</a>
-  
-</p>
+## 主要功能
+- 自动备份和管理照片、视频
+- 支持时间线、相册、分享和地图
+- 提供人脸识别、智能搜索和机器学习服务
+- 使用 PostgreSQL、VectorChord 和 Valkey 保存索引与任务状态
 
-## 免责声明
+## 访问说明
+- Web 入口：安装后通过 `http://<服务器 IP>:<HTTP 端口>` 访问。
+- 实际端口以安装时填写的 `PANEL_APP_PORT_HTTP` 为准。
 
-- ⚠️ 本项目正在 **非常活跃** 地开发中。
-- ⚠️ 可能存在 bug 或者随时有重大变更。
-- ⚠️ **不要把本软件作为您存储照片或视频的唯一方式。**
-- ⚠️ 为了您宝贵的照片与视频，请始终遵守 [3-2-1](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/) 备份方案！
+## Introduction
+Immich is a high-performance open source photo and video management platform for backing up mobile media to a self-hosted server. It includes timelines, albums, search, facial recognition and machine-learning features.
 
-> [!NOTE]
-> 完整的项目文档以及安装教程请参见：https://immich.app/。
+## Features
+- Automatically backs up and manages photos and videos
+- Supports timelines, albums, sharing and maps
+- Provides facial recognition, smart search and machine learning
+- Uses PostgreSQL, VectorChord and Valkey for indexes and job state
+
+## 部署说明
+- 本应用使用 Docker Compose 在 1Panel 中部署。
+- `1.122.3` 和 `release` 使用 Immich 创始人 Alex Tran 的旧 Docker Hub 发布命名空间 `altran1502/immich-*`，不是普通社区重构镜像；当前官方 Compose 已使用 `ghcr.io/immich-app/*`，新安装应优先选择对应的 `3.x` 固定版本。
+- 应用分类：媒体。
+- 支持架构：amd64。
+- 可选版本以应用商店页面为准。
+- 安装后按应用表单中的端口访问 Web UI、SSH 或对应服务。
+
+## 端口
+| 变量 | 说明 | 默认值 | 必填 |
+| --- | --- | --- | --- |
+| PANEL_APP_PORT_HTTP | 端口 | 40194 | 是 |
+
+## 数据持久化
+| 变量 | 说明 | 默认值 | 必填 |
+| --- | --- | --- | --- |
+| UPLOAD_LOCATION | 上传用文件夹路径 | ./data/upload | 是 |
+| CACHE_PATH | 缓存文件夹路径 | ./data/cache | 是 |
+| DB_PATH | 数据库文件夹路径 | ./data/data | 是 |
+
+升级或迁移前，请在 1Panel 中备份上述数据目录。
+
+从 `1.132.3` 升级到 `3.x` 前请特别注意：
+
+- 必须先备份 `UPLOAD_LOCATION`，并通过 PostgreSQL 导出方式备份数据库；运行中的 `DB_PATH` 热拷贝不能作为可靠数据库备份。
+- 数据库镜像会从已弃用的 `pgvecto-rs` 切换到官方 VectorChord 兼容镜像。首次启动会执行扩展迁移和索引重建，大型图库可能需要较长时间。
+- 完成 VectorChord 迁移后不可降级到低于 `1.133.0` 的 Immich 版本。
+- v3 包含 API 等破坏性变更，依赖 Immich API 的第三方工具需要按官方 v3 migration guide 检查兼容性。
+- 移动客户端应在服务器升级前更新到与服务器主版本兼容的版本。
+
+从 `3.0.2` 升级到 `3.0.3` 不改变表单、持久化路径、Valkey 或 PostgreSQL 镜像。首次启动会自动执行数据库迁移；升级前仍需备份数据库和上传目录，并等待服务恢复健康后再执行其他操作。
+
+从 `3.0.3` 升级到 `3.1.0` 保持四服务拓扑、表单、上传/缓存/数据库路径和 PostgreSQL 镜像不变，仅更新 Immich server、machine-learning 与 Valkey 镜像。官方发布说明未列出服务端部署迁移，但首次启动仍可能执行数据库迁移；升级前请备份上传目录和 PostgreSQL 数据库，并等待所有服务恢复健康。
+
+## 配置项
+| 变量 | 说明 | 默认值 | 必填 |
+| --- | --- | --- | --- |
+| PANEL_DB_NAME | 数据库名 | immich | 是 |
+| PANEL_DB_USER | Postgres 数据库用户 | postgres | 是 |
+| PANEL_DB_USER_PASSWORD | Postgres 数据库用户密码 | immich | 是 |
+| DB_STORAGE_TYPE | 数据库存储介质类型 | SSD | 是 |
+
+## 使用说明
+- 安装完成后，在 1Panel 应用页面查看运行状态、端口和日志。
+- 数据库位于机械硬盘时将 `DB_STORAGE_TYPE` 设为 `HDD`，SSD 或 NVMe 保持 `SSD`。
+- 首次启用前，请按安装表单填写域名、账号、密码、Token、数据目录等参数。
+- 如需对外开放访问，请同步检查防火墙、安全组和反向代理配置。
+
+## 参考资料
+- 官网: <https://immich.app>
+- 文档: <https://docs.immich.app>
+- v3 迁移指南: <https://immich.app/blog/v3-migration>
+- VectorChord 升级说明: <https://docs.immich.app/install/upgrading/#migrating-to-vectorchord>
+- 源码: <https://github.com/immich-app/immich>

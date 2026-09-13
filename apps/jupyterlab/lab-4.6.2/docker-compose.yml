@@ -1,0 +1,28 @@
+services:
+  jupyterlab:
+    image: "quay.io/jupyter/base-notebook:lab-4.6.2@sha256:e6f115af0bc688b884bec4e00523512deb808972e117797608fa1bf29931714a"
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    user: "1000:100"
+    networks:
+      - 1panel-network
+    ports:
+      - "${PANEL_APP_PORT_HTTP}:8888"
+    command:
+      - start-notebook.py
+      - --IdentityProvider.token=${JUPYTER_TOKEN}
+      - --ServerApp.allow_remote_access=True
+    environment:
+      - TZ=${TZ}
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    volumes:
+      - "${APP_DATA_DIR}:/home/jovyan/work"
+    labels:
+      createdBy: "Apps"
+
+networks:
+  1panel-network:
+    external: true

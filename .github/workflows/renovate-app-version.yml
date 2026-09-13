@@ -2,7 +2,9 @@ name: Update app version in Renovate Branches
 
 on:
   push:
-    branches: [ 'renovate/*' ]
+    branches:
+      - 'renovate/*'
+      - 'selfhosted-renovate/*'
   workflow_dispatch:
     inputs:
       manual-trigger:
@@ -10,10 +12,14 @@ on:
         default: ''
 jobs:
   update-app-version:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.ref_name, 'renovate/') ||
+      startsWith(github.ref_name, 'selfhosted-renovate/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
 
@@ -25,7 +31,12 @@ jobs:
       - name: Get list of updated files by the last commit in this branch separated by space
         id: updated-files
         run: |
-          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | tr '\n' ' ')"
+          base_ref="${{ github.event.before }}"
+          if [[ -z "$base_ref" || "$base_ref" =~ ^0+$ ]]; then
+            base_ref="HEAD^"
+          fi
+          echo "base_ref=$base_ref" >> "$GITHUB_OUTPUT"
+          echo "files=$(git diff --name-only "$base_ref" "${{ github.sha }}" | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
 
       - name: Run renovate-app-version.sh on updated files
         run: |
@@ -33,20 +44,34 @@ jobs:
 
           for file in "${files[@]}"; do
             if [[ $file == *"docker-compose.yml"* ]]; then
-              app_name=$(echo $file | cut -d'/' -f 2)
-              old_version=$(echo $file | cut -d'/' -f 3)
+              app_name=$(echo "$file" | cut -d'/' -f 2)
+              old_version=$(echo "$file" | cut -d'/' -f 3)
               chmod +x .github/workflows/renovate-app-version.sh
-              .github/workflows/renovate-app-version.sh $app_name $old_version
+              .github/workflows/renovate-app-version.sh \
+                "$app_name" \
+                "$old_version" \
+                "$file" \
+                "${{ steps.updated-files.outputs.base_ref }}"
             fi
           done
 
       - name: Commit & Push Changes
         run: |
           IFS=' ' read -ra files <<< "${{ steps.updated-files.outputs.files }}"
+          declare -A apps=()
 
           for file in "${files[@]}"; do
             if [[ $file == *"docker-compose.yml"* ]]; then
-              app_name=$(echo $file | cut -d'/' -f 2)
-              git add "apps/$app_name/*" && git commit -m "Update app version [skip ci]" --no-verify && git push || true
+              app_name=$(echo "$file" | cut -d'/' -f 2)
+              apps["$app_name"]=1
             fi
+          done
+
+          for app_name in "${!apps[@]}"; do
+            git add "apps/$app_name"
+            if git diff --cached --quiet; then
+              continue
+            fi
+            git commit -m "Update app version [skip ci]" --no-verify
+            git push
           done
